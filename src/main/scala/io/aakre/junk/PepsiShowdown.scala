@@ -1,3 +1,5 @@
+package io.aakre.junk
+
 import scala.util.Random
 
 object PepsiShowdown {
