@@ -14,6 +14,8 @@ object Dice {
   }
 
   object Dice {
+    def empty: Dice = Dice(0,0)
+
     val D4: Dice  = Dice(1, 4)
     val D6: Dice  = Dice(1, 6)
     val D12: Dice = Dice(1, 12)
@@ -22,6 +24,7 @@ object Dice {
 
   final case class DiceResult(dice: Dice, value: Int) { self =>
     def +(that: DiceResult): DiceResult = DiceResult(self.dice + that.dice, self.value + that.value)
+    def empty: DiceResult = DiceResult(Dice.empty, 0)
     override def toString = s"$dice $value"
   }
 
@@ -32,7 +35,7 @@ object Dice {
 
   object Roll {
     def roll(d: Dice): DiceResult = {
-      val random = Random.between(d.min, d.max)
+      val random = Random.between(d.min, d.max+1)
       Roll(d, () => DiceResult(d, random)).result
     }
     def roll(ds: List[Dice]): List[DiceResult] = ds.map(roll)
@@ -48,6 +51,9 @@ object Dice {
     println(r1)
     val r2 = Roll.roll(D6 + D6 + D6)
     println(r2)
+
+    println(Dice(0,0))
+    println(Roll.roll(Dice(0,0)))
 
     val l1 = List(D4, D6, D12, D20)
     println(l1)
