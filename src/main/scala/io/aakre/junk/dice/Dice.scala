@@ -25,6 +25,11 @@ object Dice {
   final case class DiceResult(dice: Dice, value: Int) { self =>
     def +(that: DiceResult): DiceResult = DiceResult(self.dice + that.dice, self.value + that.value)
     def empty: DiceResult = DiceResult(Dice.empty, 0)
+
+    def withModifier(mod: Int): DiceResult = {
+      self.copy(value = value+mod)
+    }
+
     override def toString = s"$dice $value"
   }
 
@@ -49,6 +54,7 @@ object Dice {
 
     val r1 = Roll.roll(D20)
     println(r1)
+    println(r1.withModifier(5) + s" (${r1.value}+5 modifier)")
     val r2 = Roll.roll(D6 + D6 + D6)
     println(r2)
 
