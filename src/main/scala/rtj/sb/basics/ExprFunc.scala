@@ -1,4 +1,4 @@
-package rtj.sb.lectures.basics
+package rtj.sb.basics
 
 import scala.annotation.tailrec
 
