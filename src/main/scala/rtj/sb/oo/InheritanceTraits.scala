@@ -28,7 +28,7 @@ object InheritanceTraits extends App {
 
   // type substitution (polymorphism)
   val unknownAnimal: Animal = new Dog()
-  unknownAnimal.eat
+  unknownAnimal.eat()
 
   // prevent subclass overrides with final on member or entire class
   // or sealed (allowed to extend class in THIS file)
