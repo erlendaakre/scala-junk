@@ -26,4 +26,17 @@ object Misc extends App {
 
   val fac10 = fac(10)
 
+  val str = "hello world, squirrels are attacking soon"
+  println(str.split(" ").toList.map(_.reverse))
+
+  val nStr = "5"
+  val n = nStr.toInt
+  val name = "Kirk"
+  val speed = 1.786f
+
+  println(s"number $n")
+  println(f"$name%s can go $speed%2.2f LY every $n%d hours")
+
+  println(raw"test \n\n\n foo")
+
 }
