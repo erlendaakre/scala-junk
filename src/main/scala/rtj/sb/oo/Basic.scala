@@ -1,6 +1,6 @@
 package rtj.sb.oo
 
-object basic extends App {
+object Basic extends App {
 
   val erlend = new Person("Erlend", 38)
   val picard = new Person("Picard", 78)
