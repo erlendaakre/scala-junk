@@ -1,6 +1,6 @@
 package rtj.sb.oo
 
-object InheritanceTraits extends App {
+object Inheritance extends App {
 
   // single inheritance
   sealed class Animal {
