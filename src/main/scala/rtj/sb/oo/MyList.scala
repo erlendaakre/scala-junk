@@ -22,7 +22,7 @@ abstract class MyList[+A] {
 // Nothing is at bottom of class hierarchy and is a valid substitute for ANY type
 // As nothing is a substitute for any type, Empty here should also be a substitute for
  // a MyList[Any Type]
-object Empty extends MyList[Nothing] {
+case object Empty extends MyList[Nothing] {
   override def head: Nothing = throw new NoSuchElementException
   override def tail: MyList[Nothing] = throw new NoSuchElementException
   override def isEmpty: Boolean = true
@@ -36,7 +36,7 @@ object Empty extends MyList[Nothing] {
   def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
 }
 
-class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
+case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
   override def head: A = h
   override def tail: MyList[A] = t
   override def isEmpty: Boolean = false
@@ -51,10 +51,10 @@ class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
   }
 
   override def map[B](tr: MyTransformer[A, B]): MyList[B] =
-    new Cons(tr.transform(h), t.map(tr))
+    Cons(tr.transform(h), t.map(tr))
 
   def ++[B >: A](list: MyList[B]): MyList[B] =
-    new Cons(h, t ++ list)
+    Cons(h, t ++ list)
 
   override def flatMap[B](tr: MyTransformer[A, MyList[B]]): MyList[B] =
     tr.transform(h) ++ t.flatMap(tr)
@@ -69,11 +69,11 @@ trait MyTransformer[-A, B] {
   def transform(a: A): B
 }
 
-class EvenPredicate extends MyPredicate[Int] {
+case object EvenPredicate extends MyPredicate[Int] {
   override def test(t: Int): Boolean = t % 2 == 0
 }
 
-class StrLenTransformer extends MyTransformer[String, Int] {
+case object StrLenTransformer extends MyTransformer[String, Int] {
   override def transform(a: String): Int = a.length
 }
 
@@ -92,7 +92,7 @@ object ListTest extends App {
   println(listOfInts.map((a: Int) => a * 2))
 
 
-  println(listOfInts.filter(new EvenPredicate))
+  println(listOfInts.filter(EvenPredicate))
 
   println(listOfInts ++ listOfInts2)
 
