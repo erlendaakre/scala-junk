@@ -1,7 +1,5 @@
 package rtj.sb.oo
 
-import rtj.sb.oo.Generics.MyList
-
 // list of Integers
 abstract class MyList[+A] {
   def head: A
@@ -12,10 +10,10 @@ abstract class MyList[+A] {
   def printElements: String
   override def toString: String = "[" + printElements + "]"
 
-  def filter(p: MyPredicate[A]): MyList[A]
-  def map[B](t: MyTransformer[A, B]): MyList[B]
+  def filter(p: A => Boolean): MyList[A]
+  def map[B](t: A => B): MyList[B]
 
-  def flatMap[B](t: MyTransformer[A,MyList[B]]): MyList[B]
+  def flatMap[B](t: A => MyList[B]): MyList[B]
   def ++[B >: A](list: MyList[B]): MyList[B] // list concat
 }
 
@@ -30,9 +28,9 @@ case object Empty extends MyList[Nothing] {
   override def add[B >: Nothing](e: B): MyList[B] = new Cons(e, Empty)
   def printElements: String = ""
 
-  def filter(p: MyPredicate[Nothing]): MyList[Nothing] = Empty
-  def map[B](t: MyTransformer[Nothing, B]): MyList[B] = Empty
-  def flatMap[B](t: MyTransformer[Nothing,MyList[B]]): MyList[B] = Empty
+  def filter(p: Nothing => Boolean): MyList[Nothing] = Empty
+  def map[B](t: Nothing => B): MyList[B] = Empty
+  def flatMap[B](t: Nothing => MyList[B]): MyList[B] = Empty
   def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
 }
 
@@ -45,58 +43,49 @@ case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
     if(t.isEmpty) "" + h
     else h + " " + t.printElements
 
-  override def filter(p: MyPredicate[A]): MyList[A] = {
-    if(p.test(h)) new Cons(h, t.filter(p))
+  override def filter(p: A => Boolean): MyList[A] = {
+    if(p(h)) Cons(h, t.filter(p))
     else t.filter(p)
   }
 
-  override def map[B](tr: MyTransformer[A, B]): MyList[B] =
-    Cons(tr.transform(h), t.map(tr))
+  override def map[B](tr: A => B): MyList[B] =
+    Cons(tr(h), t.map(tr))
 
   def ++[B >: A](list: MyList[B]): MyList[B] =
     Cons(h, t ++ list)
 
-  override def flatMap[B](tr: MyTransformer[A, MyList[B]]): MyList[B] =
-    tr.transform(h) ++ t.flatMap(tr)
+  override def flatMap[B](tr: A => MyList[B]): MyList[B] =
+    tr(h) ++ t.flatMap(tr)
 }
 
-
-
-trait MyPredicate[-T] {
-  def test(t: T): Boolean
-}
-trait MyTransformer[-A, B] {
-  def transform(a: A): B
-}
-
-case object EvenPredicate extends MyPredicate[Int] {
-  override def test(t: Int): Boolean = t % 2 == 0
-}
-
-case object StrLenTransformer extends MyTransformer[String, Int] {
-  override def transform(a: String): Int = a.length
+case object StrLenTransformer extends ((String) => Int) {
+  override def apply(v1: String): Int = v1.length
 }
 
 object ListTest extends App {
-  val listOfInts: MyList[Int] = new Cons(1, new Cons(2, new Cons(3, Empty)))
-  val listOfInts2: MyList[Int] = new Cons(5, new Cons(6, Empty))
-  val listOfStrings: MyList[String] = new Cons("Hi", new Cons("there", Empty))
+  val listOfInts: MyList[Int] =  Cons(1, Cons(2, Cons(3, Empty)))
+  val listOfInts2: MyList[Int] =  Cons(5, Cons(6,Empty))
+  val listOfStrings: MyList[String] =  Cons("Hi",  Cons("there", Empty))
 
   println(listOfInts)
   println(listOfStrings)
 
-  println(listOfInts.map(new MyTransformer[Int, Int] {
-    override def transform(a: Int): Int = a*2
+  println(listOfInts.map(new Function1[Int, Int] {
+    override def apply(v1: Int): Int = v1*2
   }))
   // or
   println(listOfInts.map((a: Int) => a * 2))
 
+  val evenPredicate = new Function1[Int, Boolean] {
+    override def apply(v1: Int): Boolean = v1 % 2 == 0
+  }
 
-  println(listOfInts.filter(EvenPredicate))
+
+  println(listOfInts.filter(evenPredicate))
 
   println(listOfInts ++ listOfInts2)
 
-  println(listOfInts.flatMap(new MyTransformer[Int, MyList[Int]] {
-    override def transform(a: Int): MyList[Int] = new Cons(a, new Cons(a*10, Empty))
+  println(listOfInts.flatMap(new Function1[Int, MyList[Int]] {
+    override def apply(a: Int): MyList[Int] = Cons(a, Cons(a*10, Empty))
   }))
 }
