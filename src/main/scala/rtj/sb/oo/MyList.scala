@@ -25,7 +25,7 @@ case object Empty extends MyList[Nothing] {
   override def tail: MyList[Nothing] = throw new NoSuchElementException
   override def isEmpty: Boolean = true
   // B must be supertype of Nothing (i.e. any class)
-  override def add[B >: Nothing](e: B): MyList[B] = new Cons(e, Empty)
+  override def add[B >: Nothing](e: B): MyList[B] = Cons(e, Empty)
   def printElements: String = ""
 
   def filter(p: Nothing => Boolean): MyList[Nothing] = Empty
@@ -38,7 +38,7 @@ case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
   override def head: A = h
   override def tail: MyList[A] = t
   override def isEmpty: Boolean = false
-  override def add[B >: A](e: B): MyList[B] = new Cons(e, this)
+  override def add[B >: A](e: B): MyList[B] = Cons(e, this)
   def printElements: String =
     if(t.isEmpty) "" + h
     else h + " " + t.printElements
