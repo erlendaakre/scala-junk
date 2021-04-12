@@ -70,22 +70,13 @@ object ListTest extends App {
   println(listOfInts)
   println(listOfStrings)
 
-  println(listOfInts.map(new Function1[Int, Int] {
-    override def apply(v1: Int): Int = v1*2
-  }))
   // or
-  println(listOfInts.map((a: Int) => a * 2))
+  println(listOfInts.map(_ * 2))
 
-  val evenPredicate = new Function1[Int, Boolean] {
-    override def apply(v1: Int): Boolean = v1 % 2 == 0
-  }
-
+  val evenPredicate = (n: Int) => n % 2 == 0
 
   println(listOfInts.filter(evenPredicate))
-
   println(listOfInts ++ listOfInts2)
 
-  println(listOfInts.flatMap(new Function1[Int, MyList[Int]] {
-    override def apply(a: Int): MyList[Int] = Cons(a, Cons(a*10, Empty))
-  }))
+  println(listOfInts.flatMap(a =>  Cons(a, Cons(a*10, Empty))))
 }
