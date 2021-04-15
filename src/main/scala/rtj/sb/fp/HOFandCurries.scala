@@ -39,6 +39,4 @@ object HOFandCurries extends App {
 
   println(stdFormat(Math.PI))
   println(preciseFormat(Math.PI))
-
-
 }
