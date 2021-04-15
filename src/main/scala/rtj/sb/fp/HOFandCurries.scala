@@ -18,12 +18,12 @@ object HOFandCurries extends App {
   val plusOne = (n: Int) => n + 1
   println(nTimes(plusOne, 5, 10))
 
-  // Curried
-  def nTimesCurried(f: Int => Int, n: Int): (Int => Int) =
+  // nTimes returns Int => Int function
+  def nTimesBetter(f: Int => Int, n: Int): (Int => Int) =
     if (n <= 0) (x: Int) => x
-    else (x: Int) => nTimesCurried(f, n - 1)(f(x))
+    else (x: Int) => nTimesBetter(f, n - 1)(f(x))
 
-  val plusTen = nTimesCurried(plusOne, 10)
+  val plusTen = nTimesBetter(plusOne, 10)
   println(plusTen(20))
 
   val curriedAdd: Int => (Int => Int) = (x: Int) => (y: Int) => x + y
@@ -31,7 +31,7 @@ object HOFandCurries extends App {
   println(add5(3))
   println(curriedAdd(10)(7))
 
-  // functions with multiple parameter lists
+  // Currying: functions with multiple parameter lists
   def curriedFormat(format: String)(x: Double) = format.format(x)
 
   val stdFormat: (Double => String) = curriedFormat("%1.2f")
