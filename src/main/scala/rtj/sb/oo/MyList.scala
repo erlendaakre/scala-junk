@@ -15,6 +15,11 @@ abstract class MyList[+A] {
 
   def flatMap[B](t: A => MyList[B]): MyList[B]
   def ++[B >: A](list: MyList[B]): MyList[B] // list concat
+
+  def foreach(f: A => ()): Unit
+  def sort(sorting: (A, A) => Int): MyList[A]
+  def zipWith[B](other: MyList[A], zipF: (A, A) => MyList[B])
+  def fold()
 }
 
 // Nothing is at bottom of class hierarchy and is a valid substitute for ANY type
