@@ -39,4 +39,35 @@ object HOFandCurries extends App {
 
   println(stdFormat(Math.PI))
   println(preciseFormat(Math.PI))
+
+
+  println("================ EXERCISES ==============")
+  def toCurry(f: (Int, Int) => Int): Int => Int => Int = (x: Int) => (y: Int) => f(x,y)
+
+  def fromCurry(f: Int => Int => Int): (Int,Int) => Int = (a: Int, b:Int) => f(a)(b)
+
+  val toCurryTest = toCurry((a: Int, b: Int) => a+b)
+  println(toCurryTest(7)(11))
+
+  val fromCurryTest = fromCurry(toCurryTest)
+  println(fromCurryTest(20, 8))
+
+
+  // TODO
+  def compose() = ???
+
+
+  println("=============== BONUS ====================")
+
+  def toCurryF[A](f: (A, A) => A): A => A => A = (x: A) => (y: A) => f(x,y)
+  def fromCurryF[A](f: A => A => A): (A,A) => A = (a: A, b:A) => f(a)(b)
+
+  val toCurryFTest = toCurryF[String]((a: String, b: String) => a + " " + b)
+  println(toCurryFTest("Hello")("Curry"))
+
+  val fromCurryFTest = fromCurryF(toCurryFTest)
+  println(fromCurryFTest("Curry", "Hellooo!"))
+
+
+
 }
