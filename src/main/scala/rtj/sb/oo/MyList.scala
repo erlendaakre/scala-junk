@@ -16,10 +16,10 @@ abstract class MyList[+A] {
   def flatMap[B](t: A => MyList[B]): MyList[B]
   def ++[B >: A](list: MyList[B]): MyList[B] // list concat
 
-  def foreach(f: A => ()): Unit
+  def foreach(f: A => Unit): Unit
   def sort(sorting: (A, A) => Int): MyList[A]
-  def zipWith[B](other: MyList[A], zipF: (A, A) => MyList[B])
-  def fold()
+  def zipWith[B >: A](other: MyList[B], zipF: (A, B) => MyList[B]): MyList[B] // TODO check variance
+  def fold[B >: A](initial: B)(f: (A,B) => B): B // TODO check
 }
 
 // Nothing is at bottom of class hierarchy and is a valid substitute for ANY type
@@ -37,6 +37,11 @@ case object Empty extends MyList[Nothing] {
   def map[B](t: Nothing => B): MyList[B] = Empty
   def flatMap[B](t: Nothing => MyList[B]): MyList[B] = Empty
   def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
+
+  override def foreach(f: Nothing => Unit): Unit = ()
+  override def sort(sorting: (Nothing, Nothing) => Int): MyList[Nothing] = Empty
+  override def zipWith[B >: Nothing](other: MyList[B], zipF: (Nothing, B) => MyList[B]): MyList[B] = Empty
+  override def fold[B >: Nothing](initial: B)(f: (Nothing, B) => B): B = ??? // TODO FIX ME
 }
 
 case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
@@ -61,6 +66,11 @@ case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
 
   override def flatMap[B](tr: A => MyList[B]): MyList[B] =
     tr(h) ++ t.flatMap(tr)
+
+  override def foreach(f: A => Unit): Unit = ???
+  override def sort(sorting: (A, A) => Int): MyList[A] = ???
+  override def zipWith[B >: A](other: MyList[B], zipF: (A, B) => MyList[B]): MyList[B] = ???
+  override def fold[B >: A](initial: B)(f: (A, B) => B): B = ??? // TODO FIX ME
 }
 
 case object StrLenTransformer extends ((String) => Int) {
