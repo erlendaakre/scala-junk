@@ -16,6 +16,7 @@ abstract class MyList[+A] {
   def flatMap[B](t: A => MyList[B]): MyList[B]
   def ++[B >: A](list: MyList[B]): MyList[B] // list concat
 
+  // HOFS
   def foreach(f: A => Unit): Unit
   def sort(sorting: (A, A) => Int): MyList[A]
   def zipWith[B >: A](other: MyList[B], zipF: (A, B) => MyList[B]): MyList[B] // TODO check variance
@@ -38,6 +39,7 @@ case object Empty extends MyList[Nothing] {
   def flatMap[B](t: Nothing => MyList[B]): MyList[B] = Empty
   def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
 
+  // HOFS
   override def foreach(f: Nothing => Unit): Unit = ()
   override def sort(sorting: (Nothing, Nothing) => Int): MyList[Nothing] = Empty
   override def zipWith[B >: Nothing](other: MyList[B], zipF: (Nothing, B) => MyList[B]): MyList[B] = Empty
@@ -67,8 +69,12 @@ case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
   override def flatMap[B](tr: A => MyList[B]): MyList[B] =
     tr(h) ++ t.flatMap(tr)
 
-  override def foreach(f: A => Unit): Unit = ???
-  override def sort(sorting: (A, A) => Int): MyList[A] = ???
+  // HOFS
+  override def foreach(f: A => Unit): Unit = {
+    f(h)
+    t.foreach(f)
+  }
+  override def sort(sorting: (A, A) => Int): MyList[A] = ??? // TODO implement next
   override def zipWith[B >: A](other: MyList[B], zipF: (A, B) => MyList[B]): MyList[B] = ???
   override def fold[B >: A](initial: B)(f: (A, B) => B): B = ??? // TODO FIX ME
 }
@@ -94,4 +100,7 @@ object ListTest extends App {
   println(listOfInts ++ listOfInts2)
 
   println(listOfInts.flatMap(a =>  Cons(a, Cons(a*10, Empty))))
+
+  println("==HOFS==")
+  listOfInts.foreach(println)
 }

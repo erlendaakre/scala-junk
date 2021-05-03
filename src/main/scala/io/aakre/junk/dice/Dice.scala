@@ -23,8 +23,7 @@ object Dice {
     val D20: Dice = Dice(1, 20)
   }
 
-  final case class DiceResult(dice: Dice, value: Int) {
-    self =>
+  final case class DiceResult(dice: Dice, value: Int) { self =>
     def +(that: DiceResult): DiceResult = DiceResult(self.dice + that.dice, self.value + that.value)
 
     def empty: DiceResult = DiceResult(Dice.empty, 0)
@@ -36,8 +35,7 @@ object Dice {
     override def toString = s"$dice $value"
   }
 
-  final case class Roll(dice: Dice, run: () => DiceResult) {
-    self =>
+  final case class Roll(dice: Dice, run: () => DiceResult) { self =>
     def +(that: Roll): Roll = Roll(self.dice + that.dice, () => self.run() + that.run())
 
     def result: DiceResult = self.run()

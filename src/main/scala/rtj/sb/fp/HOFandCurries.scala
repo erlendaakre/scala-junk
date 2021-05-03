@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 object HOFandCurries extends App {
 
   // HOF - Higher Order Functions
-  //   val superFunc: (Int, (String, (Int => Boolean)) => Int) => (Int => Int) = ???
+  // val superFunc: (Int, (String, (Int => Boolean)) => Int) => (Int => Int) = ???
 
   // function that applies function n times to a value x
   // nTimes(f,n,x)
@@ -54,7 +54,8 @@ object HOFandCurries extends App {
 
 
   // TODO
-  def compose() = ???
+//  def compose(f,g) => x => f(g(x))
+  def andThen = ??? // g(f(x))
 
 
   println("=============== BONUS ====================")
