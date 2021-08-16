@@ -18,12 +18,12 @@ object ExprFunc extends App {
 
   def foo(): Int = 50
 
-  def print(): Unit = {
+  def prettyPrint(): Unit = {
     val v = f(foo())
     def pretty(n: Int) = s"*$n*"
     println(pretty(v))
   }
-  print()
+  prettyPrint()
 
   def repeat(s: String, n: Int): String = {
     if(n <= 1) s
@@ -34,11 +34,17 @@ object ExprFunc extends App {
   def fac(n: Int): Long = {
     @tailrec
     def go(acc: Long, i: Int): Long =
-      if(i == n) acc*n
-      else go(acc*i , i+1)
-    go(1, 1)
+      if(i <= 0) acc
+      else go(acc*i , i-1)
+    go(1, n)
   }
   println(fac(5))
+  assert(fac(1) == 1)
+  assert(fac(2) == 2)
+  assert(fac(3) == 6)
+  assert(fac(5) == 120)
+  assert(fac(8) == 40320)
+  assert(fac(12) == 479001600)
 
   def fib(n: Int): Long = {
     if(n <= 2) 1
@@ -48,7 +54,6 @@ object ExprFunc extends App {
 
   def isPrime(n: Long) = {
     assert(n >= 1, "isPrime only take positive integers")
-    println(s"is $n prime?")
     @tailrec
     def go(i: Int): Boolean = {
       if(i == n/2) true
@@ -61,10 +66,11 @@ object ExprFunc extends App {
   }
 
   println(isPrime(5))
-  println(isPrime(6))
-  println(isPrime(21))
-  println(isPrime(47))
-  println(isPrime(48))
-  println(isPrime(606))
-  println(isPrime(607))
+  assert(isPrime(5))
+  assert(!isPrime(6))
+  assert(!isPrime(21))
+  assert(isPrime(47))
+  assert(!isPrime(48))
+  assert(!isPrime(606))
+  assert(isPrime(607))
 }
