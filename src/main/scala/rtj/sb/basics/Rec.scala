@@ -16,11 +16,11 @@ object Rec extends App {
 
   def factorial2(n: Long): BigInt = {
     @tailrec
-    def go(acc: BigInt, nn: Long): BigInt =
+    def go(nn: Long, acc: BigInt): BigInt =
       if(nn <= 1) acc
-      else go(acc*nn, nn-1)
+      else go(nn-1, acc*nn)
 
-    go(1, n)
+    go(n, 1)
   }
 
   println(factorial(10))
