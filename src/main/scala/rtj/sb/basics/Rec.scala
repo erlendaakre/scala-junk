@@ -64,9 +64,18 @@ object Rec extends App {
       else go(i+1,current, current+previous)
     }
 
-    go(3, 1,2)
+    if( n < 1) 0
+    else if(n == 1 || n == 2) 1
+    else go(3, 1,2)
   }
 
-  println(fib(8))
+  assert(fib(0) == 0)
+  assert(fib(1) == 1)
+  assert(fib(2) == 1)
+  assert(fib(3) == 2)
+  assert(fib(5) == 5)
+  assert(fib(7) == 13)
+  assert(fib(8) == 21)
+  assert(fib(15) == 610)
 
 }
