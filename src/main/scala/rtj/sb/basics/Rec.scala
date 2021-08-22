@@ -65,8 +65,8 @@ object Rec extends App {
     }
 
     if( n < 1) 0
-    else if(n == 1 || n == 2) 1
-    else go(3, 1,2)
+    else if(n == 2) 1
+    else go(2, 1,1)
   }
 
   assert(fib(0) == 0)
