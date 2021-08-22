@@ -56,7 +56,7 @@ object ExprFunc extends App {
     assert(n >= 1, "isPrime only take positive integers")
     @tailrec
     def go(i: Int): Boolean = {
-      if(i == n/2) true
+      if(i > n/2) true
       else {
         if(n % i == 0) false
         else go(i+1)
@@ -66,6 +66,8 @@ object ExprFunc extends App {
   }
 
   println(isPrime(5))
+  assert(isPrime(3))
+  assert(!isPrime(4))
   assert(isPrime(5))
   assert(!isPrime(6))
   assert(!isPrime(21))

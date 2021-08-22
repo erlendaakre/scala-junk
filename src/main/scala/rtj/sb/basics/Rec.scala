@@ -32,13 +32,13 @@ object Rec extends App {
   def concat(s: String, n:Int): String = {
     @tailrec
     def go(i: Int, acc: String): String = {
-      if(i <= 1) acc
+      if(i <= 0) acc
       else go(i-1, acc+s)
     }
-    go(n,s)
+    go(n,"")
   }
 
-  println(concat("lol",15))
+  println(concat("lol",3))
 
   def isPrime(n: Int): Boolean = {
     @tailrec
@@ -53,7 +53,9 @@ object Rec extends App {
   println(isPrime(2003))
   println(isPrime(125))
 
-
+  (2 to 5000).foreach { n =>
+    assert(isPrime(n) == ExprFunc.isPrime(n))
+  }
 
   def fib(n: Int): Long = {
     @tailrec
